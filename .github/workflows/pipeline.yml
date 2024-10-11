@@ -11,9 +11,9 @@ jobs:
   build-and-scan:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: saishubham0209/pythonapp
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      DOCKER_IMAGE: aamirpatel/cicdpy
+      #SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      #SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
@@ -32,31 +32,31 @@ jobs:
         run: |
           docker push $DOCKER_IMAGE:${{ github.sha }}
           docker push $DOCKER_IMAGE:latest
-      - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v3.0.0
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=hackathon-proj -Dsonar.host.url=${{ env.SONAR_HOST_URL
-            }} -Dsonar.login=${{ env.SONAR_TOKEN }}
-            -Dsonar.working.directory=./.scannerwork
-      - name: Print SonarQube Logs
-        run: >
-          ls -al .scannerwork
-          cat .scannerwork/report-task.txt || echo "report-task.txt not found"
+     # - name: Official SonarQube Scan
+     #   uses: SonarSource/sonarqube-scan-action@v3.0.0
+     #   with:
+     #     projectBaseDir: .
+     #     args: >
+     #       -Dsonar.projectKey=hackathon-proj -Dsonar.host.url=${{ env.SONAR_HOST_URL
+     #       }} -Dsonar.login=${{ env.SONAR_TOKEN }}
+     #       -Dsonar.working.directory=./.scannerwork
+     # - name: Print SonarQube Logs
+     #   run: >
+     #     ls -al .scannerwork
+     #     cat .scannerwork/report-task.txt || echo "report-task.txt not found"
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
+          aws-region: us-east-1
       - name: Install kubectl
         uses: azure/setup-kubectl@v2.0
         with:
            version: 'v1.24.0' # default is latest stable
         id: install
       - name: Update kube config
-        run: aws eks update-kubeconfig --region ap-south-1 --name hackathon-k8s
+        run: aws eks update-kubeconfig --region us-east-1 --name my-cluster
       - name: Deploy to EKS
         run: |
           kubectl apply -f deployment.yaml
