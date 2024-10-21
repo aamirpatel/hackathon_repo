@@ -74,5 +74,5 @@ jobs:
         with:
           target: 'http://a6ef7a97bea044a2f82e18bab9846f23-1291370913.us-east-1.elb.amazonaws.com:3000/'
           #rules_file_name: '.zap/rules.tsv'
-          docker_name: 'owasp/zap2docker-stable'
+          docker_name: 'zaproxy/zap-stable'
           cmd_options: '-a -m 5 -r zap_report.html'
