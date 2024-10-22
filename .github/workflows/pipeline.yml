@@ -72,7 +72,7 @@ jobs:
       - name: Run OWASP ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.4.0
         with:
-          target: 'http://a6ef7a97bea044a2f82e18bab9846f23-1291370913.us-east-1.elb.amazonaws.com:3000/'
+          target: 'http://20.84.92.125'
           #rules_file_name: '.zap/rules.tsv'
           docker_name: 'zaproxy/zap-stable'
           cmd_options: '-a -m 5 -r zap_report.html'
